@@ -78,16 +78,16 @@ newdf <-  newdf[which(newdf[,"mm"]=="00"
 meandism315 <- newdf %>% group_by(elapsedhours) %>% summarise(avgdism315 = mean(dischargem3))
 
 # Add hourly average to each reading
-newdf <- dplyr::inner_join(newdf, meandism315, by = "elapsedhours")
+fulldf <- dplyr::inner_join(newdf, meandism315, by = "elapsedhours")
 
 # Here is where we'll need to reorganize the columns and strip unneeded data.
 # I need some input here, or even just to see Cody's cleaned files.
 
 
 # Write information to a new file
-write.csv(newdf, gsub("Precleaning_", "", file_path), row.names=FALSE, na = "")
+write.csv(fulldf, gsub("Precleaning_", "15_", file_path), row.names=FALSE, na = "")
 
+hourlydf <- fulldf %>% group_by(date, elapseddays, elapsedhours, avgdism3) %>% summarise(avgdism315 = mean(dischargem3))
 
-
-
+write.csv(hourlydf, gsub("Precleaning_", "Hourly_", file_path), row.names=FALSE, na = "")
 
