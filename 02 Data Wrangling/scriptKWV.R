@@ -8,7 +8,7 @@
 require(dplyr)
 library(data.table)
 
-setwd("~/PR/00 Doc/")
+setwd("~/PR/00 Docs/")
 
 year <- "2006"
 
