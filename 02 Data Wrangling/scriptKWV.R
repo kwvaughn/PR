@@ -81,6 +81,8 @@ meandism315 <- newdf %>% group_by(elapsedhours) %>% summarise(avgdism315 = mean(
 newdf <- dplyr::inner_join(newdf, meandism315, by = "elapsedhours")
 
 # Here is where we'll need to reorganize the columns and strip unneeded data.
+# I need some input here, or even just to see Cody's cleaned files.
+
 
 # Write information to a new file
 write.csv(newdf, gsub("Precleaning_", "", file_path), row.names=FALSE, na = "")
