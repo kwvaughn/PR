@@ -2,17 +2,21 @@
 # a tab-delimited file showing the discharge rates (code 00060) for Guanajibo near Hormigueros 
 # (code 50138000) for the calendar year of 1995:
 # https://nwis.waterdata.usgs.gov/nwis/uv?cb_00060=on&format=rdb&site_no=50138000&period=&begin_date=2006-01-01&end_date=2006-12-31
-# This file can be interpreted as-is by R, I think, if we can figure out how to store it once it's 
-# downloaded.
+
+# Site numbers of interest:
+# 50138000: Rio Guanajibo near Hormigueros
+# 50147800: Rio Culebrinas at Hwy 404 near Moca
+# 50136400: Rio Rosario near Hormigueros
+# 50144000: Rio Grande de Anasco near San Sebastian
 
 require(dplyr)
 library(data.table)
 
 setwd("~/PR/00 Docs/")
 
-year <- "2006"
+year <- "2015"
 
-siteno <- "50138000"
+siteno <- "50147800"
 
 startdate <- as.Date(paste(year, "-01-01", sep = ""))
 
@@ -90,4 +94,3 @@ write.csv(fulldf, gsub("Precleaning_", "15_", file_path), row.names=FALSE, na = 
 hourlydf <- fulldf %>% group_by(date, elapseddays, elapsedhours, avgdism3) %>% summarise(avgdism315 = mean(dischargem3))
 
 write.csv(hourlydf, gsub("Precleaning_", "Hourly_", file_path), row.names=FALSE, na = "")
-
