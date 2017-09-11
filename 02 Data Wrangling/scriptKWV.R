@@ -14,9 +14,9 @@ library(data.table)
 
 setwd("~/PR/00 Docs/")
 
-year <- "2015"
-
 siteno <- "50147800"
+
+year <- 1995
 
 startdate <- as.Date(paste(year, "-01-01", sep = ""))
 
