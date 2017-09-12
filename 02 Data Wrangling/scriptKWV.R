@@ -89,7 +89,8 @@ fulldf <- dplyr::inner_join(newdf, meandism315, by = "elapsedhours")
 
 
 # Write 15-minute interval information to a new file
-write.csv(fulldf, gsub("Precleaning_", "15_", file_path), row.names=FALSE, na = "")
+# Commented out because the hourly data is more useful
+#write.csv(fulldf, gsub("Precleaning_", "15_", file_path), row.names=FALSE, na = "")
 
 # Trim dataset to hourly averages
 hourlydf <- fulldf %>% group_by(date, elapseddays, elapsedhours, avgdism3) %>% summarise(avgdism315 = mean(dischargem3))
