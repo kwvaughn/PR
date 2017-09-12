@@ -14,15 +14,17 @@ library(data.table)
 
 setwd("~/PR/00 Docs/")
 
-siteno <- "50147800"
+siteno <- 50144000
 
-year <- 1995
+year <- 2015
 
 startdate <- as.Date(paste(year, "-01-01", sep = ""))
 
-ofile_name = paste("Precleaning_", siteno, "_", year, ".csv", sep = "")
+ofile_name = paste(siteno, "_", year, ".csv", sep = "")
 
-file_path = paste("../01 Data/", ofile_name, sep = "")
+str = "~/Box Sync/PuertoRicoSedimentYields_SharedFolder/Kate's Work/Data/Originals/"
+
+file_path = paste(str, ofile_name, sep = "")
 
 query <- paste("https://nwis.waterdata.usgs.gov/nwis/uv?cb_00060=on&format=rdb&site_no=", siteno, 
                "&period=&begin_date=", year, "-01-01&end_date=", year, "-12-31", sep = "")
@@ -34,7 +36,7 @@ odf <- fread(query)
 str(odf)
 
 # Save the original file for reference
-write.csv(odf, file_path, row.names=FALSE, na = "")
+write.csv(odf, gsub(".csv", "_Precleaning.csv", file_path), row.names=FALSE, na = "")
 
 # Remove all the unnecessary columns and header information
 df <- cbind(odf[2:nrow(odf),3], odf[2:nrow(odf),5])
@@ -89,11 +91,11 @@ fulldf <- dplyr::inner_join(newdf, meandism315, by = "elapsedhours")
 
 
 # Write 15-minute interval information to a new file
-# Commented out because the hourly data is more useful
+# Commented out because the hourly data is more useful; change gsub before use
 #write.csv(fulldf, gsub("Precleaning_", "15_", file_path), row.names=FALSE, na = "")
 
 # Trim dataset to hourly averages
 hourlydf <- fulldf %>% group_by(date, elapseddays, elapsedhours, avgdism3) %>% summarise(avgdism315 = mean(dischargem3))
 
 # Write hourly information to a new file
-write.csv(hourlydf, gsub("Precleaning_", "Hourly_", file_path), row.names=FALSE, na = "")
+write.csv(hourlydf, gsub("Originals", siteno, file_path), row.names=FALSE, na = "")
