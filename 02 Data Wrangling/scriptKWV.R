@@ -1,4 +1,4 @@
-# If we wanted to automate the grabbing of files from USGS, we could.  Here's a link that generates
+# This script automates the grabbing of files from USGS's water database.  Here's a link that generates
 # a tab-delimited file showing the discharge rates (code 00060) for Guanajibo near Hormigueros 
 # (code 50138000) for the calendar year of 1995:
 # https://nwis.waterdata.usgs.gov/nwis/uv?cb_00060=on&format=rdb&site_no=50138000&period=&begin_date=2006-01-01&end_date=2006-12-31
@@ -8,17 +8,41 @@
 # 50147800: Rio Culebrinas at Hwy 404 near Moca
 # 50136400: Rio Rosario near Hormigueros
 # 50144000: Rio Grande de Anasco near San Sebastian
+# 50043800: Rio de la Plata at Comerio
+# 50044810: Rio Guadiana near Guadiana (pre-2001 data unavailable)
+# 50050900: Rio Grande de Loiza at Quebrada Arenas
+# 50053025: Rio Turabo above Borinquen
+# 50056400: Rio Valenciano near Juncos
+# 50058350: Rio Canas at Rio Canas
+# 50063800: Rio Espiritu Santo near Rio Grande
+# 50065500: Rio Mameyes near Sabana
+# 50071000: Rio Fajardo near Fajardo (missing data: 10/1/1997 - 9/30/2007)
+# 50075000: Rio Icacos near Naguabo (missing data: 10/1/04 - 9/30/2007)
+# 50110900: Rio Toa Vaca above Lago Toa Vaca
+# 50114900: Rio Portugues near Tibes (pre-1997 data unavailable)
 
 require(dplyr)
 library(data.table)
 
 setwd("~/PR/00 Docs/")
 
-siteno <- 50144000
+# This collection lists all of the sites to collect data from.  This doesn't include sites with missing data.
+sitelist = c(50138000, 50147800, 50136400, 50144000, 50043800, 50050900, 50053025, 50056400,
+             50058350, 50063800, 50065500, 50110900)
 
-year <- 2015
 
-startdate <- as.Date(paste(year, "-01-01", sep = ""))
+# This loop will collect data from each site in the collection called 'sitelist'.  
+# For this loop to work, the range of available data for a site must include the years 1995-2015; 
+# if that range isn't available, disable this loop, adjust the date range below, and run it manually.
+for(i in sitelist){
+
+siteno <- i
+
+# This loop will collect a separate data file for every year in the date range (inclusive).
+# If the default date range isn't available, adjust these numbers to reflect available date range.
+for(j in 1995:2015){
+  
+year <- j
 
 ofile_name = paste(siteno, "_", year, ".csv", sep = "")
 
@@ -62,6 +86,9 @@ df$dischargem3 = df$dischargecfs * 0.0283168
 # Reclassify date column as Date type
 df$date = as.Date(as.character(df$date))
 
+# Set beginning date for finding elapsed time
+startdate <- as.Date(paste(year, "-01-01", sep = ""))
+
 # Create new column with elapsed days since beginning of year (Jan 1 is day 0)
 df <- dplyr::mutate(df, elapseddays = as.numeric(df$date - startdate))
 
@@ -99,3 +126,7 @@ hourlydf <- fulldf %>% group_by(date, elapseddays, elapsedhours, avgdism3) %>% s
 
 # Write hourly information to a new file
 write.csv(hourlydf, gsub("Originals", siteno, file_path), row.names=FALSE, na = "")
+
+}
+
+}
