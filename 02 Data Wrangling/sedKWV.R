@@ -1,6 +1,11 @@
+# This script pulls suspended-sediment data (parameter #80154, "Suspended sediment concentration, 
+# milligrams per liter") from the NWIS water-quality database for a given set of water-quality
+# measurement locations.  Currently it collects all existing suspended-sediment data, regardless 
+# of date, but that can be narrowed down if necessary.
+#
 # Original search; returns a lot of extra stuff
 # https://nwis.waterdata.usgs.gov/nwis/qwdata?qw_count_nu=1&site_no=50147800&parameter_cd=80154&inventory_output=0&rdb_inventory_output=value&begin_date=&end_date=&TZoutput=0&pm_cd_va_search=&pm_cd_compare=Greater+than&pm_cd_result_va=&radio_previous_parm_cds=&param_cd_operator=&radio_parm_cds=all_parm_cds&radio_multiple_parm_cds=&radio_parm_cd_file=&qw_attributes=0&format=rdb&qw_sample_wide=0&rdb_qw_attributes=0&date_format=YYYY-MM-DD&rdb_compression=value
-
+#
 # Modified search: only returns 80154 data
 # https://nwis.waterdata.usgs.gov/nwis/qwdata?qw_count_nu=1&site_no=50147800&parameter_cd=80154&inventory_output=0&rdb_inventory_output=value&begin_date=&end_date=&TZoutput=0&qw_attributes=0&format=rdb&qw_sample_wide=0&rdb_qw_attributes=0&date_format=YYYY-MM-DD&rdb_compression=value
 
@@ -10,7 +15,8 @@ library(data.table)
 
 setwd("~/PR/00 Docs/")
 
-# This collection lists all of the sites to collect data from.  50050900 is not included, as it has no data.
+# This collection lists all of the sites to collect data from.  50050900 is not included, as it has 
+# no data.  The script will fail upon trying to collect nonexistent data.
 sitelist = c(50138000, 50147800, 50136400, 50144000, 50043800, 50044810, 50053025, 50056400,
              50058350, 50063800, 50065500, 50071000, 50075000, 50110900, 50114900)
 
