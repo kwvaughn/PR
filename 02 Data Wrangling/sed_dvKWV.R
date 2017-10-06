@@ -12,7 +12,7 @@ library(data.table)
 
 setwd("~/PR/00 Docs/")
 
-# This collection lists all of the sites to collect data from.  50071000 needs to be run seaprately.
+# This collection lists all of the sites to collect data from.  50071000 needs to be run separately.
 sitelist = c(50138000, 50147800, 50136400, 50144000, 50043800, 50044810, 50053025, 50056400,
              50058350, 50063800, 50065500, 50075000, 50110900, 50114900, 50050900)
 
