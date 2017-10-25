@@ -15,10 +15,8 @@ library(data.table)
 
 setwd("~/PR/00 Docs/")
 
-# This collection lists all of the sites to collect data from.  50050900 is not included, as it has 
-# no data.  The script will fail upon trying to collect nonexistent data.
-sitelist = c(50138000, 50147800, 50136400, 50144000, 50043800, 50044810, 50053025, 50056400,
-             50058350, 50063800, 50065500, 50071000, 50075000, 50110900, 50114900)
+# This collection lists all of the sites to collect data from.  The script will fail upon trying to collect nonexistent data.
+sitelist = c(50051800, 50055000, 50055225, 50055750, 50057000)
 
 
 # This loop will collect data from each site in the collection called 'sitelist'.  
@@ -28,7 +26,7 @@ for(i in sitelist){
   
   file_name = paste("sedqw_", siteno, ".csv", sep = "")
   
-  str = "~/Box Sync/PuertoRicoSedimentYields_SharedFolder/Kate's Work/Data/Originals/"
+  str = "~/Box Sync/PR Raw Data/Originals/"
   
   file_path = paste(str, file_name, sep = "")
   
@@ -65,7 +63,7 @@ for(i in sitelist){
   cleandf <- df %>% select(date, hh, mm, sedmgl)
   
   # Write information to a new file
-  write.csv(cleandf, gsub("Originals", siteno, file_path), row.names=FALSE, na = "")
+  write.csv(cleandf, gsub("Originals", "Suspended Sediment", file_path), row.names=FALSE, na = "")
   
   print(paste("Files saved for site", siteno))
   

@@ -20,15 +20,20 @@
 # 50075000: Rio Icacos near Naguabo (missing data: 10/1/04 - 9/30/2007)
 # 50110900: Rio Toa Vaca above Lago Toa Vaca
 # 50114900: Rio Portugues near Tibes (pre-1997 data unavailable)
+# 50051800
+# 50055000
+# 50055225
+# 50055750
+# 50057000
+
 
 require(dplyr)
 library(data.table)
 
 setwd("~/PR/00 Docs/")
 
-# This collection lists all of the sites to collect data from.  This doesn't include sites with missing data.
-sitelist = c(50138000, 50147800, 50136400, 50144000, 50043800, 50050900, 50053025, 50056400,
-             50058350, 50063800, 50065500, 50110900)
+# This collection lists all of the sites to collect data from.
+sitelist = c(50051800, 50055000, 50055225, 50055750, 50057000)
 
 
 # This loop will collect data from each site in the collection called 'sitelist'.  
@@ -46,7 +51,7 @@ for(i in sitelist){
     
     ofile_name = paste(siteno, "_", year, ".csv", sep = "")
     
-    str = "~/Box Sync/PuertoRicoSedimentYields_SharedFolder/Kate's Work/Data/Originals/"
+    str = "~/Box Sync/PR Raw Data/Originals/"
     
     file_path = paste(str, ofile_name, sep = "")
     
@@ -54,7 +59,7 @@ for(i in sitelist){
                    "&period=&begin_date=", year, "-01-01&end_date=", year, "-12-31", sep = "")
     
     # Get the requested data from USGS
-    odf <- fread(query)
+    odf <- fread(query, skip = 24L)
     
     # See what the data looks like pre-manipulation
     str(odf)
@@ -118,11 +123,10 @@ for(i in sitelist){
     #write.csv(fulldf, gsub("Precleaning_", "15_", file_path), row.names=FALSE, na = "")
     
     # Trim dataset to hourly averages
-    hourlydf <- fulldf %>% group_by(date, elapseddays, elapsedhours, avgdism3) 
-                        %>% summarise(avgdism315 = mean(dischargem3))
+    hourlydf <- fulldf %>% group_by(date, elapseddays, elapsedhours, avgdism3) %>% summarise(avgdism315 = mean(dischargem3))
     
     # Write hourly information to a new file
-    write.csv(hourlydf, gsub("Originals", siteno, file_path), row.names=FALSE, na = "")
+    write.csv(hourlydf, gsub("Originals", "Discharge Yearly", file_path), row.names=FALSE, na = "")
     
   }
   
